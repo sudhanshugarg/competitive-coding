@@ -1,0 +1,123 @@
+#include<iostream>
+#include<map>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+typedef class Point{
+    public:
+    int x;
+    int y;
+    int index;
+    
+    Point (int a, int b, int c){
+        x = a;
+        y = b;
+        index = c;
+    }
+    bool operator < (const Point &p) const{
+        if(x < p.x) return true;
+        if(y < p.y) return true;
+        return false;
+    }
+}Point;
+
+class BearBall{
+    public:
+    int countThrows(vector<int> x, vector<int> y){
+        map<pair<int, int>, map<int, bool> > slopeSet;
+        int dist[1501][1501];
+        memset(dist, 0, sizeof(dist));
+
+        int n = x.size();
+        for(int i=0;i<n;i++)
+        for(int j=i+1;j<n;j++){
+            dely = y[j]-y[i];
+            delx = x[j]-x[i];
+            if(delx = 0){
+                //slope is infty.
+                pair<int,int> p(1,0);
+                if(slopeSet.find(p) == slopeSet.end())
+                    slopeSet[p] = map<int,bool>();
+                slopeSet[p][i] = true;
+                slopeSet[p][j] = true;
+            }
+            else if (dely == 0){
+                //slope is 0.
+                pair<int,int> p(0,1);
+                if(slopeSet.find(p) == slopeSet.end())
+                    slopeSet[p] = map<int,bool>();
+                slopeSet[p][i] = true;
+                slopeSet[p][j] = true;
+            }
+
+            //none of the slopes are 0.
+            int g;
+
+            if(abs(dely) > abs(delx))
+               g = gcd(abs(dely), abs(delx);
+            else g = gcd(abs(delx), abs(dely));
+            dely /= g;
+            delx /= g;
+
+            {
+            pair<int,int> p(dely, delx);
+            if(slopeSet.find(p) == slopeSet.end())
+                slopeSet[p] = map<int,bool>();
+            slopeSet[p][i] = true;
+            slopeSet[p][j] = true;
+            }
+        }
+        //now that we have all the slopes in place.
+        bool multipleSlopes = false;
+        if(slopeSet.size() > 1) multipleSlopes = true;
+
+        //need to sort each slope set.
+        map<pair<int, int>, map<int, bool> >::iterator it;
+        map<int,bool>::iterator it2;
+        map<pair<int, int>, vector<Point> > mvp;
+        for(it = slopeSet.begin(); it != slopeSet.end(); it++){
+          //it->first is the slope
+          //it->second is a map, move it into a vector.
+
+          vector<Point> vp;
+          for(it2 = (it->second).begin(); it2 != (it->second.end()); it2++){
+              //it2->first is the point.
+              Point p(x[it2->first], y[it2->first], it2->first);
+              vp.push_back(p);
+          }
+
+          sort(vp.begin(), vp.end());
+          for(int i=0;i<vp.size()-1; i++){
+          int nextj = i+3;
+          if(!multipleSlopes) nextj = n;
+          for(int j=i+1;j<i+3;j++){
+              //only adjacent points have 1 round.
+              pair<int,int> nextpair (vp[i].index, vp[j].index);
+              pair<int,int> nextpair2 (vp[j].index, vp[i].index);
+                      dist[i][j] = j-i;
+                      dist[j][i] = j-i;
+
+          }
+          mvp[it->first] = vp;
+        }
+        
+        //now we have sorted points for each slope in mvp.
+        //now calculate min distance.
+        //if(there is a single point outside a slope, record it).
+        for(int i=0;i<n;i++)
+        for(int j=i+1;j<n;j++){
+            //there are atleast 2 slopes.
+            if(dist[i][j] > 2) dist[][] = 2;
+        }}
+        else{
+        }
+
+
+    }
+
+    int gcd(int a, int b){
+        if(b == 0) return a;
+        return gcd(b, a%b);
+    }
+};
