@@ -1,0 +1,45 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+class GerrymanderEasy {
+public:
+
+double getmax (vector<int> a, vector<int> b, int k) {
+
+  int i,j;
+  int n = a.size();
+  double best = 0.0;
+  double num, den;
+  for(i=0;i<n-k+1;i++){
+    //take the first k values that include i
+    num = den = 0.0;
+    for(j=0;j<k;j++){
+      num += (double)b[i+j];
+      den += (double)a[i+j];
+    }
+    if(num/den > best) {
+    cout << "i=" << i
+    << ", best=" << best
+    << ", num=" << num
+    << ", den=" << den
+    << endl;
+    best = num/den;
+    }
+    for(j=i+k;j<n;j++){
+      num += (double)b[j];
+      den += (double)a[j];
+    if(num/den > best) {
+    cout << "loop, i=" << i
+    << ", best=" << best
+    << ", num=" << num
+    << ", den=" << den
+    << endl;
+    best = num/den;
+    }
+    }
+  }
+  return best;
+}
+
+};

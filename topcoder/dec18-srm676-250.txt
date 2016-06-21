@@ -1,0 +1,42 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+class WaterTank{
+    public:
+double minOutputRate(vector<int> t, vector<int> x, int C){
+
+   int n = x.size();
+   long double maxflow = -1;
+   for(int i=0;i<n;i++)
+      maxflow = maxflow<x[i]?x[i]:maxflow;
+
+   long double low = 0;
+   long double high = maxflow*1.0;
+   long double mid;
+
+   while((high-low) > 1e-6){
+   //cout << low << "," << high << endl;
+      mid = (low+high)/2;
+      if(checkC(t,x,C,mid)){
+          //yes mid output flow can work.
+          high = mid;
+      }
+      else
+        low = mid;
+   }
+   return low;
+}
+
+bool checkC(vector<int> t, vector<int> x, int C, long double mid){
+    int n = t.size();
+    long double curr = 0.0;
+    for(int i=0;i<n;i++){
+      if(mid > x[i])
+        continue;
+      curr += 1.0*(x[i]-mid)*t[i];
+      if(curr > C) return false;
+    }
+    return true;
+}
+    };

@@ -1,0 +1,73 @@
+C, t, x
+
+after t[0] secs, x[0]*t[0] liters have entered tank. total = (x[0]-R)*t[0] <= C
+after t[1] secs, x[1]*t[1] liters have entered tank. total = (x[0]-R)*t[0] + (x[1]-R)*t[1] <= C
+after t[2] secs, x[2]*t[2] liters have entered tank. total = (x[0]-R)*t[0] + (x[1]-R)*t[1] + (x[2]-R)*t[2] <= C
+
+sum of all: S - R*(t0 + t1 + ... tn-1) <= C
+t, x, C
+3,3: 1,2: 3
+
+after 3 secs: 3
+after 4 more sec: 5
+after 5 secs: 7
+after 6 secs: 9
+
+atmost 50 elements.
+
+current: 3.
+after 3 secs: 9.
+
+need to be less than equal to 3.
+
+min: 0
+max: max of all.
+
+binary search.
+
+
+if the rate of exit is R.
+after 1 sec. x[0]-R
+after t[0] secs, x[0]*t[0] liters have entered tank. total = x[0]*t[0]
+
+
+#include<iostream>
+#include<vector>
+using namespace std;
+
+class WaterTank{
+    public:
+double minOutputRate(vector<int> t, vector<int> x, int C){
+
+   int n = x.size();
+   int maxflow = -1;
+   for(int i=0;i<n;i++)
+      maxflow = max<x[i]?x[i]:max;
+
+   double low = 0;
+   double high = maxflow*1.0;
+
+   while(low < high){
+      mid = (low+high)/2;
+      if(checkC(t,x,C,mid)){
+          //yes mid output flow can work.
+          high = mid;
+      }
+      else
+        low = mid;
+   }
+   return low;
+}
+
+bool checkC(vector<int> t, vector<int> x, int C, int mid){
+    int n = t.size();
+    double curr = 0.0;
+    for(int i=0;i<n;i++){
+      if(mid > x[i])
+        continue;
+      curr += 1.0*(x[i]-mid)*t[i];
+      if(curr > C) return false;
+    }
+    return true;
+}
+    };
