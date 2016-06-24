@@ -15,7 +15,6 @@ typedef struct Trie{
 }Trie;
 
 typedef struct Tree{
-    vector<Tree*> children;
     Tree* parent;
     Trie* dict;
     string name;
@@ -69,6 +68,9 @@ void insertQuestion(const string &name, const string &q){
     Tree* node = directAccessToTreeNode[name];
     //if this is the root
     while(node != NULL){
+        //cout << "inserting $" << q << "$" 
+        //    << " in %" << node->name << "%"
+        //    << endl;
         insertTrie(node, q);
         node = node->parent;
     }
@@ -79,41 +81,53 @@ void insertQuestion(const string &name, const string &q){
 int main(){
     int N, M, K;
     cin >> N;
+    //cout << N << endl;
     //there are N topics.
     //
     string line;
     std::getline(cin, line);
-    istringstream iss;
+    std::getline(cin, line);
+    //cout << "line = " << line << endl;
     string s;
-    int level = 0;
+    istringstream iss(line);
+
+
     //there is a guarantee for a single root topic
+    /*
     iss >> s;
     Tree* root = new Tree();
     root->parent = NULL;
     root->dict = NULL;
     root->name = s;
     directAccessToTreeNode[root->name] = root;
+    */
 
     stack<Tree*> st;
-    Tree* currentTop = root;
+    Tree* currentNode = NULL;
+
+    //cout << "reahced here" << endl;
 
     while(iss >> s){
+        //cout << "next string: #" << s << "#" << endl;
         if(s == "("){
-            st.push(currentTop);
+            st.push(currentNode);
             //currentTop stays unchanged.
         }
         else if (s == ")"){
             st.pop();
-            if(!st.empty()) currentTop = st.top();
-            else currentTop = NULL;
         }
         else{
             Tree* next = new Tree();
             next->name = s;
-            next->parent = currentTop;
+            //if(st.empty()) cout << "Parent is currently NULL" << endl;
+            //else cout << "The parent of #" << s << " is #" << st.top()->name << "#" << endl;
+            if(!st.empty())
+                next->parent = st.top();
+            else next->parent = NULL;
             next->dict = NULL;
-            currentTop->children.push_back(next);
             directAccessToTreeNode[s] = next;
+            //TODO confirm that children of a node aren't needed.
+            currentNode = next;
         }
     }
     //this has created the tree. Now comes the time to populate it.
@@ -122,6 +136,7 @@ int main(){
     //the topic name, and thus have to be unique.
 
     cin >> M;
+    std::getline(cin, line);
     for(int i=0;i<M;i++){
         std::getline(cin,line);
         istringstream iss2(line);
@@ -132,12 +147,15 @@ int main(){
         //first token is name of tree node
         //second token is question
         q = mytrim(q);
+        //cout << "topic = #" << s << "#" << endl;
+        //cout << "question = #" << q << "#" << endl;
         insertQuestion(s, q);
     }
 
     //now that we have inserted all possible questions, now its 
     //time to find the queries.
     cin >> K;
+    std::getline(cin, line);
     for(int i=0;i<K;i++){
         std::getline(cin, line);
         istringstream iss2(line);
@@ -146,8 +164,13 @@ int main(){
         getline(iss2, prefix);
         prefix = mytrim(prefix);
 
+        //cout << "finding: #" << prefix << "#" 
+        //    << ", in topic: #" << topic << "#"
+        //    << endl;
+
         //assuming prefix exists.
         //TODO put in a check incase it doesn't exist.
         cout << findQuery(directAccessToTreeNode[topic]->dict, prefix, 0) << endl;
     }
+    return 0;
 }
