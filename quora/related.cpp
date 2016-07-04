@@ -18,7 +18,7 @@ void dfs(const pair<int,int> &p){
     int v = p.second;
 
     int deg = edgeStore[v].size();
-    edges[p] = readingTime[v];
+    edges[p] = (double)readingTime[v];
     if(deg == 1) return;
 
     //first find out if the expectedValue for v
@@ -35,9 +35,9 @@ void dfs(const pair<int,int> &p){
         pair<int,int> revp;
         revp.first = v;
         revp.second = u;
-        edges[p] = ((expectedValue[v] - readingTime[v])* edgeStore[v].size()
+        edges[p] = ((expectedValue[v] - (double)readingTime[v])* (double)edgeStore[v].size()
                     - edges[revp]) 
-                    /(edgeStore[v].size()-1) + readingTime[v];
+                    /(double)(edgeStore[v].size()-1) + (double)readingTime[v];
         return;
     }
     //now, calculate the value for a dfs, starting
@@ -111,7 +111,7 @@ int main(){
     for(int i=0;i<N;i++){
         //compute the edges value.
         deg = (double)edgeStore[i].size();
-        currVal = readingTime[i];
+        currVal = (double)readingTime[i];
         p.first = i;
         for(int j=0;j<deg;j++){
             p.second = edgeStore[i][j];

@@ -18,7 +18,12 @@ int main(int argc, char* argv[]){
         cout << rand()%maxtime+1 << " ";
     }
     cout << rand()%maxtime+1 << endl;
-    for(int i=1;i<len;i++){
-        cout << i+1 << " " << 1 << endl;
+    for(int i=1;true;i++){
+        if(2*i <= len)
+        cout << i << " " << 2*i << endl;
+        else break;
+        if(2*i+1 <= len)
+        cout << i << " " << 2*i+1 << endl;
+        else break;
     }
 }
